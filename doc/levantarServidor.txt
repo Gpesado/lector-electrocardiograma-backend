@@ -6,6 +6,8 @@ https://j2logo.com/virtualenv-pip-librerias-python/
 https://es.stackoverflow.com/questions/19910/problemas-al-instalar-flask-y-librer%C3%ADas
 https://github.com/gastondg/Deteccion_color_OpenCV/blob/master/formasycolores.ipynb
 
+-- deploy heroku
+https://www.geeksforgeeks.org/deploy-python-flask-app-on-heroku/
 
 -- ver librerias instaladas
 pip freeze
