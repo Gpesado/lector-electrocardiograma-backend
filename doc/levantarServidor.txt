@@ -1,0 +1,37 @@
+export FLASK_APP=server.py
+python -m flask run
+https://www.youtube.com/watch?v=2UBb6EV3sDs
+CREAR AMBIENTE Y FLASK: https://es.stackoverflow.com/questions/19910/problemas-al-instalar-flask-y-librer%C3%ADas
+https://j2logo.com/virtualenv-pip-librerias-python/
+https://es.stackoverflow.com/questions/19910/problemas-al-instalar-flask-y-librer%C3%ADas
+https://github.com/gastondg/Deteccion_color_OpenCV/blob/master/formasycolores.ipynb
+
+
+-- ver librerias instaladas
+pip freeze
+
+-- crear env
+python -m venv env
+
+-- (en activate.bat -de tu env- agregarle estas 2 lineas )
+set "FLASK_APP=run.py"
+set "FLASK_ENV=development"
+
+-- activar env
+env\Scripts\activate.bat
+
+-- desactivar env
+deactivate
+
+pip install de todos las lineas que estan en requirements.txt
+
+flask run
+flask run --port 6000
+
+
+START:
+cd C:\Users\gonza\Desktop\TESIS\TESIS_FINAL\BACKEND
+env\Scripts\activate.bat
+flask run
+
+http://127.0.0.1:5000/process

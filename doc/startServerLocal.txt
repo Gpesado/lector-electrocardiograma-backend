@@ -1,0 +1,7 @@
+pegar esto en una ventana cmd porque desde el code no funca:
+
+
+cd C:\Users\gonza\Desktop\TESIS\TESIS_FINAL\BACKEND
+env\Scripts\activate.bat
+start chrome "http://127.0.0.1:5000/process"
+flask run
