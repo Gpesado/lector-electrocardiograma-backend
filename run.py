@@ -32,7 +32,9 @@ def setPixel(image, row, col, pixel: Pixel):
 def calculateValueFromPixels(y, yBase):
     return yBase - y
 
-
+####################################################################
+################### Start Program ##################################
+####################################################################
 @app.route('/')
 def hello_world():
     return 'Aplicacion Funcionando!'
@@ -88,4 +90,4 @@ def process():
         final[i].mostrar()
         showResult.append(final[i].toString() + " \n")
         
-    return ' '.join(showResult)
+    return ''.join(showResult)
