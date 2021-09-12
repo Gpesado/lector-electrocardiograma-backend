@@ -35,13 +35,13 @@ def calculateValueFromPixels(y, yBase):
 ####################################################################
 ################### Start Program ##################################
 ####################################################################
-@app.route('/')
-def hello_world():
-    return 'Aplicacion Funcionando!'
+@app.route("/")
+def home_view():
+        return "<h1>Welcome to Geeks for Geeks</h1>"
 
-@app.route('/process')
+@app.route("/process")
 def process():
-    file_path = 'img/imagenPrueba.png'
+    file_path = "img/imagenPrueba.png"
     image = cv2.imread(file_path)
     imageFinal = cv2.imread(file_path)
 
