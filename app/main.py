@@ -65,9 +65,9 @@ def process():
             else:
                 setPixel(imageFinal, row, col, white)
 
-    cv2.imshow("CUADRICULA - ORIGINAL", image)
-    cv2.imshow("CUADRICULA - FINAL", imageFinal)
-    cv2.waitKey(0)
+    #cv2.imshow("CUADRICULA - ORIGINAL", image)
+    #cv2.imshow("CUADRICULA - FINAL", imageFinal)
+    #cv2.waitKey(0)
 
     # TRANSFORMAMOS LA FOTO MODIFICADA EN EL VECTOR QUE RECIBE EL PROGRAMA DE NICO
     final = []
