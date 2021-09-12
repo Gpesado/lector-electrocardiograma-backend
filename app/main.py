@@ -1,5 +1,5 @@
-from Pixel import Pixel
-from VectorNico import VectorNico
+from .Pixel import Pixel
+from .VectorNico import VectorNico
 import cv2
 import numpy as np
 
