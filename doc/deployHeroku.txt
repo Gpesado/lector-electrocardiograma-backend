@@ -1,0 +1,4 @@
+heroku login
+git add .
+git commit -m "holis"
+git push heroku main
