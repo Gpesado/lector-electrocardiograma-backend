@@ -85,7 +85,9 @@ def process():
                 break
 
     #TEST DE VECTOR
+    showResult = []
     for i in range (0, len(final)):
         final[i].mostrar()
+        showResult.append(final[i].toString() + " \n")
         
-    return "fin"
+    return ''.join(showResult)
