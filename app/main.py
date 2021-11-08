@@ -1,14 +1,29 @@
-from .Pixel import Pixel
-from .VectorNico import VectorNico
+from Pixel import Pixel
+from VectorNico import VectorNico
 import cv2
 import numpy as np
+import base64
+from PIL import Image, ImageFile
+from io import BytesIO
 
-from flask import Flask
+
+from flask import Flask, request, jsonify
 app = Flask(__name__)
+saveInMemoryFileName = 'C:/Users/gonza/Desktop/TESIS/TESIS_FINAL/BACKEND/test.png'
 
 ####################################################################
 ################### Auxiliar Methods ###############################
 ####################################################################
+def saveFileToDisk(inMemoryImg):
+    encoded_data = inMemoryImg.split(',')[1]
+    ImageFile.LOAD_TRUNCATED_IMAGES = True
+    with open(saveInMemoryFileName, 'wb') as f:
+        print("WRITING FILE IN PATH: ", saveInMemoryFileName)
+        im = Image.open(BytesIO(base64.b64decode(encoded_data)))
+        im.save(saveInMemoryFileName, 'PNG')
+        f.close
+    return saveInMemoryFileName
+
 def isRed(basePixel: Pixel, redPixel: Pixel, graduation):
     if (basePixel.red > (redPixel.red - graduation)
         and ((basePixel.green + basePixel.blue < 255) and not(basePixel.green > 150 and basePixel.blue > 150))):
@@ -37,13 +52,20 @@ def calculateValueFromPixels(y, yBase):
 ####################################################################
 @app.route("/")
 def home_view():
-        return "<h1>Welcome to Geeks for Geeks</h1>"
+    return "<h1>Welcome to Geeks for Geeks</h1>"
 
-@app.route("/process")
+@app.route("/process", methods=['GET', 'POST'])
 def process():
-    file_path = "img/imagenPrueba.png"
+    content = request.json
+    imgFromEndpoint = content['image']
+    file_path = saveFileToDisk(imgFromEndpoint)
+    print("READING FILE IN PATH: ", file_path)
     image = cv2.imread(file_path)
+    assert not isinstance(image,type(None)), 'image not found'
+    print("img = [", image, "]")
     imageFinal = cv2.imread(file_path)
+    assert not isinstance(imageFinal,type(None)), 'image Final not found'
+    print("img Final = [", imageFinal, "]")
 
     # NUMBER OF ROWS AND COLS IN IMAGE
     rows = image.shape[0:2][0]

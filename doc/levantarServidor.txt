@@ -30,6 +30,8 @@ pip install de todos las lineas que estan en requirements.txt
 flask run
 flask run --port 6000
 
+ACTUALIZAR DEPENDENCIAS? 
+pip freeze > requirements.pip
 
 START:
 cd C:\Users\gonza\Desktop\TESIS\TESIS_FINAL\BACKEND
