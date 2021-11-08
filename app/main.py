@@ -9,7 +9,7 @@ from io import BytesIO
 
 from flask import Flask, request, jsonify
 app = Flask(__name__)
-saveInMemoryFileName = 'C:/Users/gonza/Desktop/TESIS/TESIS_FINAL/BACKEND/test.png'
+saveInMemoryFileName = 'test.png'
 
 ####################################################################
 ################### Auxiliar Methods ###############################
