@@ -52,7 +52,7 @@ def calculateValueFromPixels(y, yBase):
 ####################################################################
 @app.route("/")
 def home_view():
-    return "<h1>Welcome to Geeks for Geeks</h1>"
+    return "<h1>Welcome to Electro App</h1>"
 
 @app.route("/process", methods=['GET', 'POST'])
 def process():
@@ -71,10 +71,10 @@ def process():
     rows = image.shape[0:2][0]
     cols = image.shape[0:2][1]
 
-    red = Pixel(0, 0, 255)
-    redGraduation = 50;
+    #red = Pixel(0, 0, 255)
+    #redGraduation = 50;
     black = Pixel(0, 0, 0)
-    blackGraduation = 50;
+    blackGraduation = content['blackGraduation']
     white = Pixel(255, 255, 255)
 
     # MODIFICAMOS LA IMAGEN ORIGINAL Y DETECTAMOS EL NEGRO EN LA FOTO, PORQUE ESTE ES EL ELECTRO QUE QUEREMOS PASAR
@@ -103,13 +103,11 @@ def process():
                     final.append(VectorNico(len(final), 0))
                 else:
                     final.append(VectorNico(len(final), calculateValueFromPixels(row, yBase)))
-                    #print(f"COL: {col} ROW: {row}")
                 break
 
-    #TEST DE VECTOR
     showResult = []
-    for i in range (0, len(final)):
-        final[i].mostrar()
-        showResult.append(final[i].toString() + " \n")
-        
-    return ''.join(showResult)
+    for i in range(0, len(final)):
+        if final[i].valor != 0:
+            showResult.append(final[i].toJSON())
+
+    return jsonify(showResult)
