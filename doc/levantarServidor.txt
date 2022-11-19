@@ -32,6 +32,8 @@ flask run --port 6000
 
 ACTUALIZAR DEPENDENCIAS? 
 pip freeze > requirements.pip
+pip install -r requirements.txt
+pip install -r TESIS\TESIS_FINAL\BACKEND\requirements.txt
 
 START:
 cd C:\Users\gonza\Desktop\TESIS\TESIS_FINAL\BACKEND
