@@ -82,21 +82,35 @@ def foundValueInImage(rows, cols, file_path, image, black, blackGraduation, whit
                 setPixel(imageFinal, row, col, white)
     return imageFinal
 
-def convertToVector(cols, rows, imageFinal, black):
+def convertToVector(cols, rows, imageFinal, black, wantedVia, dissplacementVias):
     final = []
     yBase = 0
     for col in range(0, cols):
         pixelFound = False
+        actualVia = 0
+        actualViaX = 0
         for row in range(0, rows):
             pixel = Pixel(imageFinal.item(row, col, 0), imageFinal.item(row, col, 1), imageFinal.item(row, col, 2))
             if isColorWanted(pixel, black, 0):
-                pixelFound = True
-                if len(final) == 0:
-                    yBase = row
-                    final.append(VectorNico(len(final), 0))
+                targetX = 0 if (actualVia == 0) else actualViaX + dissplacementVias
+                #print("col",col,"row",row,"targetX",targetX)
+
+                if(wantedVia == actualVia and row >= targetX):
+                    #print("FOUND VIA in row ", row, "targetX =" , targetX)
+                    pixelFound = True
+                    if len(final) == 0:
+                        yBase = row
+                        final.append(VectorNico(len(final), 0))
+                    else:
+                        final.append(VectorNico(len(final), calculateValueFromPixels(row, yBase)))
+                    break
                 else:
-                    final.append(VectorNico(len(final), calculateValueFromPixels(row, yBase)))
-                break
+                    if(row >= targetX): #we are not in same via 
+                        #print("via not used in row ", row, "targetX =" , targetX, "wantedVia",wantedVia,"actualVia",actualVia)
+                        actualVia += 1
+                        actualViaX = row
+                    else: print("we are in same via")
+                    
         if pixelFound == False:
             final.append(VectorNico(len(final), 0))
 
@@ -139,10 +153,9 @@ def findPixelValueInTime(cols, rows, image, red, redGraduation, debugFlag):
 # SO SMALL SQUEARE HAVE 200 / 5 MILISECONDS = 40 MILISECONDS
 # IF FOUND THE SIZE OF A SMALL SQUEARE IN valorTiempoPixel VARIABLE SO I ASUME FIRST VECTOR LIKE 0, AND START ADDING THAT TIME TO THE VECTOR
 # set correct time to result depending of the pixels used
-def fixTimeEscale(final, valorTiempoPixel, debugFlag):
+def fixTimeEscale(final, valorTiempoPixel, lambdaErrors, debugFlag):
     timeValue = 0
     milisecondsPerSmallSquare = 40
-    lambdaErrors = 1
     pixelTimeValue =  milisecondsPerSmallSquare / (valorTiempoPixel + lambdaErrors)
     fix = []
     showResult = []
@@ -182,6 +195,9 @@ def process():
     black = Pixel(0, 0, 0)
     blackGraduation = content['blackGraduation']
     white = Pixel(255, 255, 255)
+    lambdaErrors = content['horizontalMovementFix']
+    numberOfVias = content['numberOfVias']
+    dissplacementVias = content['dissplacementVias']
 
     # VARIABLES TO GET THE IMAGE
     imgFromEndpoint = content['image']
@@ -200,15 +216,24 @@ def process():
     #cv2.waitKey(0)
 
 # TRANSFORMAMOS LA FOTO MODIFICADA EN EL VECTOR DE TIEMPO / VALOR
-    print("CONVERT BLACK AND WHITE IMAGE TO VECTOR")
-    final = convertToVector(cols, rows, imageFinal, black)
+    vias = []
+    for wantedVia in range (0, numberOfVias):
+        print("CONVERT BLACK AND WHITE IMAGE TO VECTOR FOR VIA =", wantedVia)
+        final = convertToVector(cols, rows, imageFinal, black, wantedVia, dissplacementVias)
+        vias.append(final)
+    
 
 # DETERMINAMOS CUANTO MIDE UN SEGUNDO DE TIEMPO EN LA GRADILLA EN PIXELES PARA AJUSTAR LA TABLA DE TIEMPOS DE LOS VECTORES
     print("BUSCANDO LA RELACION PIXEL / MILISEGUNDOS PARA AJUSTAR POSTERIORMENTE VECTORES")
     valorTiempoPixel = findPixelValueInTime(cols, rows, image, red, redGraduation, debugFlag)
 
 # CONVERT VECTOR TO SHOW CORRECTLY TIME RESULTS
-    print("AJUSTANDO TABLA USANDO VALOR TIEMPO 1 PIXEL EN",valorTiempoPixel, "MILISEGUNDOS")
-    showResult = fixTimeEscale(final, valorTiempoPixel, debugFlag)
+    showResultVias = []
+    vectorNum = 1
+    for wantedViaVector in vias:
+        print("AJUSTANDO TABLA PARA VECTOR", vectorNum, "USANDO VALOR TIEMPO 1 PIXEL EN", valorTiempoPixel, "MILISEGUNDOS")
+        showResult = fixTimeEscale(wantedViaVector, valorTiempoPixel, lambdaErrors, debugFlag)
+        showResultVias.append(showResult)
+        vectorNum+=1
 
-    return jsonify(showResult)
+    return jsonify(showResultVias)
